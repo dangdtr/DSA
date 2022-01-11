@@ -1,5 +1,8 @@
 package stack
 
+import "fmt"
+
+
 type Node struct {
 	Value interface{}
 	Next *Node
@@ -10,7 +13,7 @@ type Stack struct {
 	size int
 }
 
-func (stack *Stack) push(value interface{}) {
+func (stack *Stack) Push(value interface{}) {
 	newNode := &Node{} // create new node
 	
 	newNode.Value = value
@@ -20,7 +23,7 @@ func (stack *Stack) push(value interface{}) {
 	stack.size++
 }
 
-func (stack *Stack) pop() interface{} {
+func (stack *Stack) Pop() interface{} {
 	popValue := stack.top.Value
 	if stack.top.Next == nil {
 		stack.top = nil
@@ -31,19 +34,19 @@ func (stack *Stack) pop() interface{} {
 	return popValue
 }
 
-func (stack *Stack) peek() interface{} {	
+func (stack *Stack) Peek() interface{} {	
 	return  stack.top.Value
 }
 
-func (stack *Stack) stackSize() interface{} {
+func (stack *Stack) StackSize() interface{} {
 	return stack.size
 }
 
-func (stack *Stack) isEmpty() interface{} {
-	return stack.stackSize() == 0
+func (stack *Stack) IsEmpty() interface{} {
+	return stack.StackSize() == 0
 }
 
-func (stack *Stack) show() (in []interface{}) {
+func (stack *Stack) Show() (in []interface{}) {
 	current := stack.top
 
 	for current != nil {
@@ -51,4 +54,15 @@ func (stack *Stack) show() (in []interface{}) {
 		current = current.Next
 	}
 	return
+}
+
+func  (stack *Stack) Test() {
+	myStack := &Stack{}
+	myStack.Push(4)
+	myStack.Push(7)
+	myStack.Push(5)
+	myStack.Push(6)
+	myStack.Pop()
+	fmt.Println(myStack.Show())
+
 }
