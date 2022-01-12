@@ -1,17 +1,18 @@
 package sort
 
-// import "fmt"
+import "math/rand"
 
 // (Recommend) Quick Sort 3 way to duplicate keys. Dont use cut-off!
-//
-// Pass []interface{} by
-//  iargs:=make([]interface{},0)
-//  for _,x:=range slice {
-// 	   iargs=append(iargs, x)
-//  }
+//  Call
+//  unsortedSlice := IntSliceToInterface(slice []int)
+// or
+//  unsortedSlice := StringSliceToInterface(slice []string)
 func QuickSort3Way(a []interface{}) {
-	shuffle(a)
+	rand.Shuffle(len(a), func(i, j int) {
+		exch(a,i,j)
+	})
 	quickSort3Way(a, 0, len(a)-1)
+	IsSorted(a)
 }
 
 func quickSort3Way(a []interface{}, lo int, hi int) {
@@ -25,6 +26,8 @@ func quickSort3Way(a []interface{}, lo int, hi int) {
 	// x[lo..lt-1] < a[lt..gt] < a[gt+1..hi]
 	quickSort3Way(a, lo, lt-1)
 	quickSort3Way(a, gt+1, hi)
+
+	IsSortedLoHi(a, lo, hi)
 }
 
 func partition3Way(a []interface{}, lo int, hi int) (int, int) {

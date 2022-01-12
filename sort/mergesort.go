@@ -1,10 +1,9 @@
 package sort
 
-//Pass a []interface{} by 
-//  iargs:=make([]interface{},0)
-//  for _,x:=range slice {
-// 	   iargs=append(iargs, x)
-//  }
+//  Call
+//  unsortedSlice := IntSliceToInterface(slice []int)
+// or
+//  unsortedSlice := StringSliceToInterface(slice []string)
 func MergeSort(a []interface{}) {
 	aux := InitEmptyInterfaceSlice(len(a))
 	mergeSort(a, aux, 0, len(a)-1)
@@ -22,6 +21,9 @@ func mergeSort(a, aux []interface{}, lo int, hi int) {
 }
 
 func merge(a, aux []interface{}, lo int, mid int, hi int) {
+	IsSortedLoHi(a, lo, mid)
+	IsSortedLoHi(a, mid+1, hi)
+
 	for k := lo; k <= hi; k++ {
 		aux[k] = a[k]
 	}
@@ -45,6 +47,8 @@ func merge(a, aux []interface{}, lo int, mid int, hi int) {
 			} 
 		} 
 	}
+	IsSortedLoHi(a, lo, hi)
+
 }
 
 

@@ -1,11 +1,10 @@
 package sort
 
-//Merge Sort Bottom-Up
-//Pass a []interface{} by
-//  iargs:=make([]interface{},0)
-//  for _,x:=range slice {
-// 	   iargs=append(iargs, x)
-//  }
+// Merge Sort Bottom-Up.
+//  Call
+//  unsortedSlice := IntSliceToInterface(slice []int)
+//  or
+//  unsortedSlice := StringSliceToInterface(slice []string)
 func MergeSortBU(a []interface{}) {
 	aux := InitEmptyInterfaceSlice(len(a))
 	N := len(a)
@@ -14,6 +13,7 @@ func MergeSortBU(a []interface{}) {
 			mergeBU(a, aux, lo, lo+sz-1, min(lo+sz+sz-1, N-1));
 		}
 	}
+	IsSorted(a)
 }
 
 func min(a, b int) int {

@@ -62,14 +62,16 @@ func (queue *Queue) Show() (in []interface{}) {
 	}
 	return
 }
-
+func NewQueue() *Queue {
+	return &Queue{}
+}
 func (queue *Queue) Test() {
-	myQueue := &Queue{}
-	myQueue.Enqueue(5)
-	myQueue.Enqueue(6)
-	myQueue.Enqueue(2)
-	myQueue.Enqueue(4)
-	myQueue.Enqueue(1)
+	myQueue := NewQueue()
+	myQueue.Enqueue("a")
+	myQueue.Enqueue("b")
+	myQueue.Enqueue("y")
+	myQueue.Enqueue("p")
+	myQueue.Enqueue("e")
 	myQueue.Dequeue()
 	fmt.Println(myQueue.Show()...)
 }

@@ -1,5 +1,9 @@
 package sort
 
+//  Call
+//  unsortedSlice := IntSliceToInterface(slice []int)
+//  or
+//  unsortedSlice := StringSliceToInterface(slice []string)
 func InsertionSort(a []interface{}) {
 	Insertion(a, 0, len(a)); 
 }

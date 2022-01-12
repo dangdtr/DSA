@@ -5,6 +5,27 @@ import (
 	"time"
 )
 
+// Convert
+//  []int to []interface{}
+func IntSliceToInterface(slice []int) []interface{} {
+	unsortedSlice := make([]interface{}, 0)
+	for _, x := range slice {
+		unsortedSlice = append(unsortedSlice, x)
+	}
+	return unsortedSlice
+}
+
+// Convert
+//  []string to []interface{}
+func StringSliceToInterface(slice []string) []interface{} {
+	unsortedSlice := make([]interface{}, 0)
+	for _, x := range slice {
+		unsortedSlice = append(unsortedSlice, x)
+	}
+	return unsortedSlice
+}
+
+// Generate Int 
 func GenerateInterfaceSlice(size int) []interface{} {
 
 	slice := make([]interface{}, size, size)
@@ -17,12 +38,14 @@ func GenerateInterfaceSlice(size int) []interface{} {
 	return slice
 }
 
+// Generate string 
 func GenerateStringSlice(size int) []string {
 	slice := make([]string, size, size)
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < size; i++ {
 		// n := rand.Intn(52) - rand.Intn(0)
 		n := rand.Intn(10)
+		// n := 1
 		slice[i] = generateString(n)
 	}
 	return slice
@@ -30,6 +53,8 @@ func GenerateStringSlice(size int) []string {
 }
 func generateString(size int) string {
 	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	// var letterRunes = []rune("0123456789")
+
 	b := make([]rune, size)
 	rand.Seed(time.Now().UnixNano())
 	for i := range b {
@@ -81,23 +106,7 @@ func IsSortedLoHi(a []interface{}, lo int, hi int) bool {
 		if Less(a[i], a[i-1]) {
 			return false
 		}
-
 	}
 	return true
 }
 
-// func GenerateSlice(size int) []int {
-
-// 	slice := make([]int, size, size)
-// 	rand.Seed(time.Now().UnixNano())
-// 	for i := 0; i < size; i++ {
-// 		slice[i] = rand.Intn(999) - rand.Intn(999)
-// 	}
-// 	return slice
-// }
-
-// func InitEmptySlice(size int) []int {
-
-// 	slice := make([]int, size, size)
-// 	return slice
-// }

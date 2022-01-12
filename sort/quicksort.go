@@ -2,18 +2,19 @@ package sort
 
 import (
 	"math/rand"
-	"time"
 )
 
 const INSERTION_SORT_CUTOFF = 8
 
 //Pass a []interface{} by
-//  iargs:=make([]interface{},0)
-//  for _,x:=range slice {
-// 	   iargs=append(iargs, x)
-//  }
+//  Call
+//  unsortedSlice := IntSliceToInterface(slice []int)
+// or
+//  unsortedSlice := StringSliceToInterface(slice []string)
 func QuickSort(a []interface{}) {
-	shuffle(a)
+	rand.Shuffle(len(a), func(i, j int) {
+		exch(a, i, j)
+	})
 	quickSort(a, 0, len(a)-1)
 }
 
@@ -55,14 +56,3 @@ func exch(a []interface{}, i int, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
-func shuffle(a []interface{}) {
-	n := len(a)
-	for i := 0; i < n; i++ {
-		r := i + uniform(n-i) // between i and n-1
-		a[i], a[r] = a[r], a[i]
-	}
-}
-func uniform(n int) int {
-	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(n)
-}

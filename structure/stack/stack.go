@@ -56,8 +56,12 @@ func (stack *Stack) Show() (in []interface{}) {
 	return
 }
 
-func  (stack *Stack) Test() {
-	myStack := &Stack{}
+func NewStack() *Stack {
+	return &Stack{}
+}
+
+func (stack *Stack) Test() {
+	myStack := NewStack()
 	myStack.Push(4)
 	myStack.Push(7)
 	myStack.Push(5)
