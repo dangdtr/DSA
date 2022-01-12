@@ -6,7 +6,7 @@ package sort
 //  or
 //  unsortedSlice := StringSliceToInterface(slice []string)
 func MergeSortBU(a []interface{}) {
-	aux := InitEmptyInterfaceSlice(len(a))
+	aux := make([]interface{}, len(a), len(a))
 	N := len(a)
 	for sz := 1; sz < N; sz = sz+sz {
 		for lo := 0; lo < N-sz; lo += sz+sz {

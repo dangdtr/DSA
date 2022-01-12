@@ -1,4 +1,4 @@
-package priorityqueue
+package structure
 
 // import "fmt"
 

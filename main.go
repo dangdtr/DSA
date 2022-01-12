@@ -2,33 +2,32 @@ package main
 
 import (
 	"fmt"
-	sort "go-algorithms/sort"
-	queue "go-algorithms/structure/queue"
-	pq "go-algorithms/structure/priorityqueue"
-	
+	"github.com/dawnpanpan/go-dsa/algs"
+	"github.com/dawnpanpan/go-dsa/algs/structure"
+	"github.com/dawnpanpan/go-dsa/algs/sort"
 )
 
 func main() {
 	// sort_test()
-	// stack_queue_test()
+	stack_queue_test()
 	// b := "-13" < "-18"
 	// fmt.Println(b)
 	pq_test()
 }
 
 func pq_test() {
-	var key = sort.GenerateInterfaceSlice(10)
+	var key = algs.GenerateInterfaceSlice(10)
 	// key := sort.StringSliceToInterface(k)
 	fmt.Println(key...)
 	
-	maxPq := pq.NewMaxPQFrom(key)
+	maxPq := structure.NewMaxPQFrom(key)
 	fmt.Println(maxPq.Show())
 
 }
 
 func sort_test() {
 	for i := 0; i < 10; i++ {
-		var unsortedSlice = sort.GenerateInterfaceSlice(10)
+		var unsortedSlice = algs.GenerateInterfaceSlice(10)
 
 		// sort.MergeSort(unsortedSlice)
 		sort.MergeSortBU(unsortedSlice)
@@ -44,6 +43,6 @@ func sort_test() {
 }
 
 func stack_queue_test() {
-	tester := queue.NewQueue()
+	tester := structure.NewQueue()
 	tester.Test()
 }
