@@ -34,11 +34,11 @@ func (stack *Stack) Peek() interface{} {
 	return  stack.top.Value
 }
 
-func (stack *Stack) StackSize() interface{} {
+func (stack *Stack) StackSize() int {
 	return stack.size
 }
 
-func (stack *Stack) IsEmpty() interface{} {
+func (stack *Stack) IsEmpty() bool {
 	return stack.StackSize() == 0
 }
 
