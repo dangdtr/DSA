@@ -1,14 +1,12 @@
-package structure
+package algs
 
 import "fmt"
 
-
 type Queue struct {
 	first *Node
-	last *Node	
-	size int
+	last  *Node
+	size  int
 }
-
 
 func (queue *Queue) Enqueue(value interface{}) {
 	var newNode Node
@@ -19,7 +17,7 @@ func (queue *Queue) Enqueue(value interface{}) {
 
 	if queue.IsEmpty() {
 		queue.first = queue.last
-	}else {
+	} else {
 		oldlast.Next = queue.last
 	}
 
@@ -45,9 +43,8 @@ func (queue *Queue) IsEmpty() bool {
 	return queue.first == nil
 }
 func (queue *Queue) QueueSize() int {
-	return queue.size;
+	return queue.size
 }
-
 
 func (queue *Queue) Show() (in []interface{}) {
 	current := queue.first

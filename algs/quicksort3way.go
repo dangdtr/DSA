@@ -1,15 +1,15 @@
-package sort
+package algs
 
 import "math/rand"
 
-// (Recommend) Quick Sort 3 way to duplicate keys. Dont use cut-off!
+// QuickSort3Way (Recommend) Quick Sort 3 way to duplicate keys. Dont use cut-off!
 //  Call
 //  unsortedSlice := IntSliceToInterface(slice []int)
 // or
 //  unsortedSlice := StringSliceToInterface(slice []string)
 func QuickSort3Way(a []interface{}) {
 	rand.Shuffle(len(a), func(i, j int) {
-		exch(a,i,j)
+		exch(a, i, j)
 	})
 	quickSort3Way(a, 0, len(a)-1)
 	IsSorted(a)

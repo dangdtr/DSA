@@ -1,17 +1,15 @@
-package structure
+package algs
 
 import "fmt"
 
-
-
 type Stack struct {
-	top *Node
+	top  *Node
 	size int
 }
 
 func (stack *Stack) Push(value interface{}) {
 	newNode := &Node{} // create new node
-	
+
 	newNode.Value = value
 	newNode.Next = stack.top
 
@@ -23,15 +21,15 @@ func (stack *Stack) Pop() interface{} {
 	popValue := stack.top.Value
 	if stack.top.Next == nil {
 		stack.top = nil
-	}else {
-		stack.top.Value, stack.top.Next = stack.top.Next.Value, stack.top.Next.Next 
+	} else {
+		stack.top.Value, stack.top.Next = stack.top.Next.Value, stack.top.Next.Next
 	}
 	stack.size--
 	return popValue
 }
 
-func (stack *Stack) Peek() interface{} {	
-	return  stack.top.Value
+func (stack *Stack) Peek() interface{} {
+	return stack.top.Value
 }
 
 func (stack *Stack) StackSize() int {
@@ -54,6 +52,13 @@ func (stack *Stack) Show() (in []interface{}) {
 
 func NewStack() *Stack {
 	return &Stack{}
+}
+
+func (stack *Stack) InteratorSlide() (item []interface{}) {
+	for current := stack.top; current != nil; current = current.Next {
+		item = append(item, current.Value)
+	}
+	return
 }
 
 func (stack *Stack) Test() {

@@ -1,4 +1,4 @@
-package searching
+package algs
 
 import "fmt"
 

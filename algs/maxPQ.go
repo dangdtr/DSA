@@ -1,54 +1,42 @@
-package structure
+package algs
 
 // import "fmt"
 
-// type MaxPQ struct {
+// MaxPQ type MaxPQ struct {
 // 	n  int
 // 	pq []PQItem
 // }
 type MaxPQ struct {
-		n  int
-		pq []interface{}
-	}
+	n  int
+	pq []interface{}
+}
 
 type PQItem struct {
 	value interface{}
 }
-
-// type PQItem interface {
-// 	fmt.Stringer
-// 	CompareTo(interface{}) int
-// }
 
 func NewMaxPQ(cap int) *MaxPQ {
 	pq := make([]interface{}, cap+1)
 	return &MaxPQ{pq: pq}
 }
 
-
-
 func NewMaxPQFrom(keyPQ []interface{}) *MaxPQ {
 	pqKey := make([]interface{}, len(keyPQ)+1)
-	
+
 	pq := &MaxPQ{pq: pqKey}
 
 	pq.n = len(keyPQ)
-	
+
 	for i := 0; i < pq.n; i++ {
 		pq.pq[i+1] = keyPQ[i]
 
 	}
-	for k := pq.n/2; k >= 1; k-- {
+	for k := pq.n / 2; k >= 1; k-- {
 		pq.sink(k)
 	}
 	//isMaxHeap();
 	return pq
 }
-
-// func (pq *MaxPQ) less(i, j int) bool {
-// 	cmp := pq.pq[i].CompareTo(pq.pq[j])
-// 	return cmp < 0
-// }
 
 func (pq *MaxPQ) less(i, j int) bool {
 	a := pq.pq[i]
@@ -140,7 +128,7 @@ func (pq *MaxPQ) resize(cap int) {
 }
 
 func (pq *MaxPQ) Show() (in []interface{}) {
-	for i := 0; i <= pq.n;i++ {
+	for i := 0; i <= pq.n; i++ {
 		in = append(in, pq.pq[i])
 	}
 	return

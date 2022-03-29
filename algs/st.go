@@ -1,4 +1,4 @@
-package searching
+package algs
 
 // Key is an interface of the key in ST
 type Key interface {

@@ -1,4 +1,4 @@
-package sort
+package algs
 
 import (
 	"math/rand"
@@ -6,7 +6,7 @@ import (
 
 const INSERTION_SORT_CUTOFF = 8
 
-//Pass a []interface{} by
+// QuickSort Pass a []interface{} by
 //  Call
 //  unsortedSlice := IntSliceToInterface(slice []int)
 // or
@@ -52,7 +52,7 @@ func partition(a []interface{}, lo int, hi int) int {
 			break
 		}
 		exch(a, i, j)
-	
+
 	}
 	exch(a, lo, j)
 	return j

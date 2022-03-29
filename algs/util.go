@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Convert
+// IntSliceToInterface Convert
 //  []int to []interface{}
 func IntSliceToInterface(slice []int) []interface{} {
 	unsortedSlice := make([]interface{}, 0)
@@ -15,7 +15,7 @@ func IntSliceToInterface(slice []int) []interface{} {
 	return unsortedSlice
 }
 
-// Convert
+// StringSliceToInterface Convert
 //  []string to []interface{}
 func StringSliceToInterface(slice []string) []interface{} {
 	unsortedSlice := make([]interface{}, 0)
@@ -25,7 +25,7 @@ func StringSliceToInterface(slice []string) []interface{} {
 	return unsortedSlice
 }
 
-// Generate Int 
+// GenerateInterfaceSlice Generate Int
 func GenerateInterfaceSlice(size int) []interface{} {
 
 	slice := make([]interface{}, size, size)
@@ -38,7 +38,7 @@ func GenerateInterfaceSlice(size int) []interface{} {
 	return slice
 }
 
-// Generate string 
+// GenerateStringSlice Generate string
 func GenerateStringSlice(size int) []string {
 	slice := make([]string, size, size)
 	rand.Seed(time.Now().UnixNano())

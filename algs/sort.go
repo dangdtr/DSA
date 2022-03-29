@@ -1,5 +1,4 @@
-package sort
-
+package algs
 
 func Less(a, b interface{}) bool {
 	switch a.(type) {
@@ -21,7 +20,6 @@ func Less(a, b interface{}) bool {
 	return false
 }
 
-
 func IsSorted(a []interface{}) bool {
 	return IsSortedLoHi(a, 0, len(a)-1)
 }
@@ -34,4 +32,3 @@ func IsSortedLoHi(a []interface{}, lo int, hi int) bool {
 	}
 	return true
 }
-

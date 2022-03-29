@@ -1,6 +1,6 @@
-package sort
+package algs
 
-// Merge Sort Bottom-Up.
+// MergeSortBU Merge Sort Bottom-Up.
 //  Call
 //  unsortedSlice := IntSliceToInterface(slice []int)
 //  or
@@ -8,9 +8,9 @@ package sort
 func MergeSortBU(a []interface{}) {
 	aux := make([]interface{}, len(a), len(a))
 	N := len(a)
-	for sz := 1; sz < N; sz = sz+sz {
-		for lo := 0; lo < N-sz; lo += sz+sz {
-			mergeBU(a, aux, lo, lo+sz-1, min(lo+sz+sz-1, N-1));
+	for sz := 1; sz < N; sz = sz + sz {
+		for lo := 0; lo < N-sz; lo += sz + sz {
+			mergeBU(a, aux, lo, lo+sz-1, min(lo+sz+sz-1, N-1))
 		}
 	}
 	IsSorted(a)
@@ -19,7 +19,7 @@ func MergeSortBU(a []interface{}) {
 func min(a, b int) int {
 	if a > b {
 		return b
-	}else {
+	} else {
 		return a
 	}
 }
@@ -29,7 +29,7 @@ func mergeBU(a, aux []interface{}, lo int, mid int, hi int) {
 		aux[k] = a[k]
 	}
 	i := lo
-	j := mid+1;
+	j := mid + 1
 
 	for k := lo; k <= hi; k++ {
 		if i > mid {
@@ -45,7 +45,7 @@ func mergeBU(a, aux []interface{}, lo int, mid int, hi int) {
 			} else {
 				a[k] = aux[i]
 				i++
-			} 
-		} 
+			}
+		}
 	}
 }

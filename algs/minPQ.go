@@ -1,16 +1,15 @@
-package structure
+package algs
 
 // import "fmt"
 
-// type MinQP struct {
+// MinQP type MinQP struct {
 // 	n  int
 // 	pq []PQItem
 // }
 type MinQP struct {
-		n  int
-		pq []interface{}
-	}
-
+	n  int
+	pq []interface{}
+}
 
 // type PQItem interface {
 // 	fmt.Stringer
@@ -22,20 +21,18 @@ func NewMinQP(cap int) *MinQP {
 	return &MinQP{pq: pq}
 }
 
-
-
 func NewMinQPFrom(keyPQ []interface{}) *MinQP {
 	pqKey := make([]interface{}, len(keyPQ)+1)
-	
+
 	pq := &MinQP{pq: pqKey}
 
 	pq.n = len(keyPQ)
-	
+
 	for i := 0; i < pq.n; i++ {
 		pq.pq[i+1] = keyPQ[i]
 
 	}
-	for k := pq.n/2; k >= 1; k-- {
+	for k := pq.n / 2; k >= 1; k-- {
 		pq.sink(k)
 	}
 	//isMaxHeap();
@@ -137,7 +134,7 @@ func (pq *MinQP) resize(cap int) {
 }
 
 func (pq *MinQP) Show() (in []interface{}) {
-	for i := 0; i <= pq.n;i++ {
+	for i := 0; i <= pq.n; i++ {
 		in = append(in, pq.pq[i])
 	}
 	return

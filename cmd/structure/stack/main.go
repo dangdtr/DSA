@@ -2,22 +2,22 @@ package main
 
 import (
 	"fmt"
+	"github.com/dawnpanpan/go-dsa/algs"
 	"regexp"
-	"github.com/dawnpanpan/go-dsa/algs/structure"
 )
 
 //  If operand -> output.
 //  If "(" -> stack.
 //  If ")" -> pop stack util encounter ")" and pop ")".
 // 	If opreator (cur)
-// 		- while stack.peek is operator 
-//			and priority(peek) >= priority(cur) then pop stack -> output	
+// 		- while stack.peek is operator
+//			and priority(peek) >= priority(cur) then pop stack -> output
 // 		- push (cur)
 func InfixToPostfix(infix string) string {
 	FormatExpression(infix)
 
 	var postfix string
-	stack := structure.NewStack()
+	stack := algs.NewStack()
 
 	for _, char := range infix {
 		s := string(char)
@@ -41,8 +41,8 @@ func InfixToPostfix(infix string) string {
 	}
 
 	for !stack.IsEmpty() {
-		if( fmt.Sprint(stack.Peek()) == "(") {
-			return "Invalid Expression";			
+		if fmt.Sprint(stack.Peek()) == "(" {
+			return "Invalid Expression"
 		}
 		postfix = postfix + fmt.Sprint(stack.Peek())
 		stack.Pop()

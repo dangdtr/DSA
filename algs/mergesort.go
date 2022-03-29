@@ -1,6 +1,6 @@
-package sort
+package algs
 
-//  Call
+// MergeSort Call
 //  unsortedSlice := IntSliceToInterface(slice []int)
 // or
 //  unsortedSlice := StringSliceToInterface(slice []string)
@@ -10,13 +10,13 @@ func MergeSort(a []interface{}) {
 }
 
 func mergeSort(a, aux []interface{}, lo int, hi int) {
-	if hi <= lo{
+	if hi <= lo {
 		return
-	} 
+	}
 
-	mid := lo + (hi - lo) / 2
+	mid := lo + (hi-lo)/2
 	mergeSort(a, aux, lo, mid)
-	mergeSort(a, aux, mid + 1, hi)
+	mergeSort(a, aux, mid+1, hi)
 	merge(a, aux, lo, mid, hi)
 }
 
@@ -28,7 +28,7 @@ func merge(a, aux []interface{}, lo int, mid int, hi int) {
 		aux[k] = a[k]
 	}
 	i := lo
-	j := mid+1;
+	j := mid + 1
 
 	for k := lo; k <= hi; k++ {
 		if i > mid {
@@ -44,12 +44,9 @@ func merge(a, aux []interface{}, lo int, mid int, hi int) {
 			} else {
 				a[k] = aux[i]
 				i++
-			} 
-		} 
+			}
+		}
 	}
 	IsSortedLoHi(a, lo, hi)
 
 }
-
-
-
