@@ -29,11 +29,11 @@ func NewGraphWithG(G Graph) *Graph {
 
 	for v := 0; v < G.v; v++ {
 		reverse := NewStack()
-		for _, w := range G.adj[v].InteratorSlide() {
+		for _, w := range G.adj[v].IteratorSlide() {
 			reverse.Push(w)
 		}
 
-		for _, w := range reverse.InteratorSlide() {
+		for _, w := range reverse.IteratorSlide() {
 			adj[v].AddFirst(w)
 		}
 	}
@@ -70,12 +70,31 @@ func (g *Graph) AddEdge(v, w int) {
 	g.adj[w].AddFirst(v)
 }
 
-func (g *Graph) AdjInt(v int) []int {
-	return g.adj[v].InteratorInt()
+func (g *Graph) AdjInt(v int) (orderSlice []int) {
+	temp := IntSliceToInterface(g.adj[v].IteratorInt())
+	QuickSort3Way(temp)
+	for _, v := range temp {
+		orderSlice = append(orderSlice, v.(int))
+	}
+	//fmt.Println(temp)
+
+	return orderSlice
+}
+
+func (g *Graph) sortAdj() *Graph {
+	for v := 0; v < g.V(); v++ {
+		temp := IntSliceToInterface(g.adj[v].IteratorInt())
+		QuickSort3Way(temp)
+		for cur, idx := g.adj[v].Head, 0; cur != nil; cur = cur.Next {
+			cur.Item = temp[idx]
+			idx++
+		}
+	}
+	return g
 }
 
 func (g *Graph) String() string {
-	s := fmt.Sprintf("%d vertices, %d edges\n", g.v, g.e)
+	s := fmt.Sprintf("=================\n%d vertices, %d edges\n", g.v, g.e)
 	for i := 0; i < g.v; i++ {
 		var adjs string
 		for _, w := range g.AdjInt(i) {

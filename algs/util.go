@@ -64,7 +64,15 @@ func generateString(size int) string {
 }
 
 func InitEmptyInterfaceSlice(size int) []interface{} {
-
 	slice := make([]interface{}, size, size)
 	return slice
+}
+
+// ReverseInt reverse int slice
+func ReverseInt(s []int) []int {
+	reverse := make([]int, len(s))
+	for i := len(s) - 1; i >= 0; i-- {
+		reverse[(len(s)-1)-i] = s[i]
+	}
+	return reverse
 }

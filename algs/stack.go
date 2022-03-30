@@ -54,9 +54,24 @@ func NewStack() *Stack {
 	return &Stack{}
 }
 
-func (stack *Stack) InteratorSlide() (item []interface{}) {
+func (stack *Stack) IteratorSlide() (item []interface{}) {
+	var temp []interface{}
 	for current := stack.top; current != nil; current = current.Next {
-		item = append(item, current.Value)
+		temp = append(temp, current.Value)
+	}
+	for i := len(temp) - 1; i >= 0; i-- {
+		item = append(item, temp[i])
+	}
+	return
+}
+
+func (stack *Stack) IteratorIntSlide() (item []int) {
+	var temp []int
+	for current := stack.top; current != nil; current = current.Next {
+		temp = append(temp, current.Value.(int))
+	}
+	for i := len(temp) - 1; i >= 0; i-- {
+		item = append(item, temp[i])
 	}
 	return
 }

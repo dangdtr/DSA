@@ -4,9 +4,9 @@ import (
 	"math/rand"
 )
 
-const INSERTION_SORT_CUTOFF = 8
+const InsertionSortCutoff = 8
 
-// QuickSort Pass a []interface{} by
+// QuickSort Pass a []interface{} by (error)
 //  Call
 //  unsortedSlice := IntSliceToInterface(slice []int)
 // or
@@ -22,10 +22,10 @@ func quickSort(a []interface{}, lo int, hi int) {
 	if lo >= hi {
 		return
 	}
-	// if hi <= lo + INSERTION_SORT_CUTOFF - 1{
-	// 	Insertion(a, lo, hi);
-	// 	return;
-	// }
+	if hi <= lo+InsertionSortCutoff-1 {
+		Insertion(a, lo, hi)
+		return
+	}
 	j := partition(a, lo, hi)
 	quickSort(a, lo, j-1)
 	quickSort(a, j+1, hi)

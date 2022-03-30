@@ -1,5 +1,7 @@
 package algs
 
+import "fmt"
+
 type DepthFirstSearch struct {
 	marked []bool //marked[v] = is there an s-v path?
 	count  int    //count = number of vertices connected to s
@@ -18,6 +20,8 @@ func NewDepthFirstSearch(G *Graph, s int) *DepthFirstSearch {
 func (s *DepthFirstSearch) DFS(G *Graph, v int) {
 	s.count++
 	s.marked[v] = true
+	fmt.Printf("%d |", v) // trace of dfs
+
 	for _, w := range G.AdjInt(v) {
 		if !s.marked[w] {
 			s.DFS(G, w)

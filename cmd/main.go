@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dawnpanpan/go-dsa/algs"
 	"github.com/dawnpanpan/go-dsa/algs/linkedlist"
+	"github.com/dawnpanpan/go-dsa/stdin"
 )
 
 func main() {
@@ -15,7 +16,8 @@ func main() {
 	// bst_test()
 	// linkedlist_test()
 	//graph_test()
-	dfs_test()
+	//dfsTest()
+	bfsTest()
 }
 
 func bst_test() {
@@ -77,19 +79,33 @@ func graph_test() {
 	//fmt.Println(g)
 }
 
-func dfs_test() {
-	//g := algs.NewGraphWithFile(stdin.NewIn("graph.txt"))
-	g := algs.GraphGeneratorSimple(13, 13)
+func dfsTest() {
+	//g := algs.NewGraphWithFile(stdin.NewIn("csp-dfs.txt"))
+	//g := algs.GraphGeneratorSimple(13, 13)
+	g := algs.NewGraphWithFile(stdin.NewIn("vnoi-bfs.txt"))
 
-	s := 0
-	dfs := algs.NewDepthFirstSearch(g, s)
+	s := 1
+	//dfs := algs.NewDepthFirstSearch(g, s)
+	//dfs.Marked(s)
+	//fmt.Println()
+	//ndfs := algs.NewNonRecursiveDFS(g, s)
+	//ndfs.Marked(s)
+	//for v := 0; v < g.V(); v++ {
+	//fmt.Println(ndfs.Trace())
 
-	for v := 0; v < g.V(); v++ {
-		if dfs.Marked(v) {
-			fmt.Printf("%d ", v)
-		}
-	}
+	dfs := algs.NewDepthFirstPaths(g, s)
+	fmt.Println(dfs.PathTo(12))
 
 	fmt.Println(g)
 
+}
+
+func bfsTest() {
+	//g := algs.NewGraphWithFile(stdin.NewIn("csp-dfs.txt"))
+	//g := algs.GraphGeneratorSimple(13, 13)
+	g := algs.NewGraphWithFile(stdin.NewIn("vnoi-bfs.txt"))
+	s := 1
+	bfs := algs.NewBreathFirstPaths(g, s)
+	fmt.Println(bfs.Trace())
+	fmt.Println(bfs.PathTo(13))
 }

@@ -63,21 +63,21 @@ func (ll *SLinkedlist) IsEmpty() bool {
 	return ll.Size() == 0
 }
 
-func (ll *SLinkedlist) InteratorSlide() (item []interface{}) {
+func (ll *SLinkedlist) IteratorSlide() (item []interface{}) {
 	for current := ll.Head; current != nil; current = current.Next {
 		item = append(item, current.Item)
 	}
 	return
 }
 
-func (ll *SLinkedlist) InteratorInt() (item []int) {
+func (ll *SLinkedlist) IteratorInt() (item []int) {
 	for current := ll.Head; current != nil; current = current.Next {
 		item = append(item, current.Item.(int))
 	}
 	return
 }
 
-func (ll *SLinkedlist) InteratorString() (item []string) {
+func (ll *SLinkedlist) IteratorString() (item []string) {
 	for current := ll.Head; current != nil; current = current.Next {
 		item = append(item, current.Item.(string))
 	}
@@ -92,10 +92,10 @@ func Demo() {
 	slist.AddFirst(6)
 	slist.AddFirst(7)
 
-	fmt.Println(slist.InteratorSlide())
+	fmt.Println(slist.IteratorSlide())
 
 	slist.RemoveFirst()
 	slist.RemoveFirst()
-	fmt.Println(slist.InteratorSlide())
+	fmt.Println(slist.IteratorSlide())
 
 }
