@@ -1,19 +1,17 @@
 package algs
 
-import "fmt"
-
-type Queue struct {
-	first *Node
-	last  *Node
+// Queue is a generic FIFO queue implemented with a singly linked list.
+type Queue[T any] struct {
+	first *nodeQ[T]
+	last  *nodeQ[T]
 	size  int
 }
 
-func (queue *Queue) Enqueue(value interface{}) {
-	var newNode Node
-	newNode.Value = value
+func (queue *Queue[T]) Enqueue(value T) {
+	newNode := &nodeQ[T]{Value: value}
 
 	oldlast := queue.last
-	queue.last = &newNode
+	queue.last = newNode
 
 	if queue.IsEmpty() {
 		queue.first = queue.last
@@ -24,7 +22,7 @@ func (queue *Queue) Enqueue(value interface{}) {
 	queue.size++
 }
 
-func (queue *Queue) Dequeue() interface{} {
+func (queue *Queue[T]) Dequeue() T {
 	temp := queue.first.Value
 	queue.first = queue.first.Next
 
@@ -32,21 +30,22 @@ func (queue *Queue) Dequeue() interface{} {
 		queue.last = nil
 	}
 
+	queue.size--
 	return temp
 }
 
-func (queue *Queue) Peek(value interface{}) interface{} {
+func (queue *Queue[T]) Peek() T {
 	return queue.first.Value
 }
 
-func (queue *Queue) IsEmpty() bool {
+func (queue *Queue[T]) IsEmpty() bool {
 	return queue.first == nil
 }
-func (queue *Queue) QueueSize() int {
+func (queue *Queue[T]) QueueSize() int {
 	return queue.size
 }
 
-func (queue *Queue) Show() (in []interface{}) {
+func (queue *Queue[T]) Show() (in []T) {
 	current := queue.first
 
 	for current != nil {
@@ -55,16 +54,12 @@ func (queue *Queue) Show() (in []interface{}) {
 	}
 	return
 }
-func NewQueue() *Queue {
-	return &Queue{}
+func NewQueue[T any]() *Queue[T] {
+	return &Queue[T]{}
 }
-func (queue *Queue) Test() {
-	myQueue := NewQueue()
-	myQueue.Enqueue("a")
-	myQueue.Enqueue("b")
-	myQueue.Enqueue("y")
-	myQueue.Enqueue("p")
-	myQueue.Enqueue("e")
-	myQueue.Dequeue()
-	fmt.Println(myQueue.Show()...)
+
+// nodeQ is an internal queue node used to avoid leaking implementation details.
+type nodeQ[T any] struct {
+	Value T
+	Next  *nodeQ[T]
 }

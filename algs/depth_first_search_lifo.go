@@ -9,7 +9,7 @@ type NonRecursiveDFS struct {
 // NewNonRecursiveDFS ...
 func NewNonRecursiveDFS(G *Graph, s int) *NonRecursiveDFS {
 	dfs := &NonRecursiveDFS{marked: make([]bool, G.V())}
-	stack := NewStack()
+	stack := NewStack[int]()
 	stack.Push(s)
 	dfs.marked[s] = true
 	//fmt.Printf("%d |", s) // trace of dfs
@@ -17,8 +17,8 @@ func NewNonRecursiveDFS(G *Graph, s int) *NonRecursiveDFS {
 
 	for !stack.IsEmpty() {
 		//fmt.Print("Stack: ")
-		//fmt.Println(stack.IteratorSlide()) // trace of stack
-		u := stack.Pop().(int)
+		// stack trace (optional)
+		u := stack.Pop()
 		if !dfs.Marked(u) {
 			//fmt.Printf("%d |", u) // trace of dfs
 			dfs.trace = append(dfs.trace, u)

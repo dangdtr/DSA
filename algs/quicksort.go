@@ -6,43 +6,39 @@ import (
 
 const InsertionSortCutoff = 8
 
-// QuickSort Pass a []interface{} by (error)
-//  Call
-//  unsortedSlice := IntSliceToInterface(slice []int)
-// or
-//  unsortedSlice := StringSliceToInterface(slice []string)
-func QuickSort(a []interface{}) {
+// QuickSortFunc sorts using quicksort with a provided less comparator, keeping T as any.
+func QuickSortFunc[T any](a []T, less func(a, b T) bool) {
 	rand.Shuffle(len(a), func(i, j int) {
 		exch(a, i, j)
 	})
-	quickSort(a, 0, len(a)-1)
+	quickSortFunc(a, 0, len(a)-1, less)
 }
 
-func quickSort(a []interface{}, lo int, hi int) {
+func quickSortFunc[T any](a []T, lo int, hi int, less func(a, b T) bool) {
 	if lo >= hi {
 		return
 	}
 	if hi <= lo+InsertionSortCutoff-1 {
-		Insertion(a, lo, hi)
+		InsertionFunc(a, lo, hi, less)
 		return
 	}
-	j := partition(a, lo, hi)
-	quickSort(a, lo, j-1)
-	quickSort(a, j+1, hi)
+    j := partitionFunc[T](a, lo, hi, less)
+    quickSortFunc[T](a, lo, j-1, less)
+    quickSortFunc[T](a, j+1, hi, less)
 }
 
-func partition(a []interface{}, lo int, hi int) int {
+func partitionFunc[T any](a []T, lo int, hi int, less func(a, b T) bool) int {
 	i := lo
 	j := hi + 1
 	for {
 		i++
-		for ; i <= j && Less(a[i], a[lo]); i++ {
+		for ; i <= j && less(a[i], a[lo]); i++ {
 			if i == hi {
 				break
 			}
 		}
 		j--
-		for ; j >= i && Less(a[lo], a[j]); j-- {
+		for ; j >= i && less(a[lo], a[j]); j-- {
 			if j == lo {
 				break
 			}
@@ -58,6 +54,6 @@ func partition(a []interface{}, lo int, hi int) int {
 	return j
 }
 
-func exch(a []interface{}, i int, j int) {
+func exch[T any](a []T, i int, j int) {
 	a[i], a[j] = a[j], a[i]
 }

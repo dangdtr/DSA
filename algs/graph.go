@@ -2,39 +2,36 @@ package algs
 
 import (
 	"fmt"
-	"github.com/dawnpanpan/go-dsa/stdin"
 	"math/rand"
-	"time"
+	"slices"
+
+	"github.com/dawnpanpan/go-dsa/stdin"
 )
 
 type Graph struct {
 	v, e int
-	adj  []*Bag
+	adj  []*Bag[int]
 }
 
 func NewGraphWithV(V int) *Graph {
-	adj := make([]*Bag, V)
+	adj := make([]*Bag[int], V)
 	for i := 0; i < V; i++ {
-		adj[i] = NewBag()
+		adj[i] = NewBag[int]()
 	}
 	return &Graph{v: V, e: 0, adj: adj}
 }
 
 func NewGraphWithG(G Graph) *Graph {
-	adj := make([]*Bag, G.v)
+	adj := make([]*Bag[int], G.v)
 
 	for i := 0; i < G.v; i++ {
-		adj[i] = NewBag()
+		adj[i] = NewBag[int]()
 	}
 
 	for v := 0; v < G.v; v++ {
-		reverse := NewStack()
-		for _, w := range G.adj[v].IteratorSlide() {
-			reverse.Push(w)
-		}
-
-		for _, w := range reverse.IteratorSlide() {
-			adj[v].AddFirst(w)
+		items := G.adj[v].Iterator() // []int in current graph
+		for i := len(items) - 1; i >= 0; i-- {
+			adj[v].AddFirst(items[i])
 		}
 	}
 
@@ -43,9 +40,9 @@ func NewGraphWithG(G Graph) *Graph {
 
 func NewGraphWithFile(in *stdin.In) *Graph {
 	v := in.ReadInt()
-	adj := make([]*Bag, v)
+	adj := make([]*Bag[int], v)
 	for i := 0; i < v; i++ {
-		adj[i] = NewBag()
+		adj[i] = NewBag[int]()
 	}
 	g := &Graph{v: v, e: 0, adj: adj}
 	e := in.ReadInt()
@@ -71,26 +68,9 @@ func (g *Graph) AddEdge(v, w int) {
 }
 
 func (g *Graph) AdjInt(v int) (orderSlice []int) {
-	temp := IntSliceToInterface(g.adj[v].IteratorInt())
-	QuickSort3Way(temp)
-	for _, v := range temp {
-		orderSlice = append(orderSlice, v.(int))
-	}
-	//fmt.Println(temp)
-
-	return orderSlice
-}
-
-func (g *Graph) sortAdj() *Graph {
-	for v := 0; v < g.V(); v++ {
-		temp := IntSliceToInterface(g.adj[v].IteratorInt())
-		QuickSort3Way(temp)
-		for cur, idx := g.adj[v].Head, 0; cur != nil; cur = cur.Next {
-			cur.Item = temp[idx]
-			idx++
-		}
-	}
-	return g
+	temp := append([]int(nil), g.adj[v].Iterator()...)
+	slices.Sort(temp)
+	return temp
 }
 
 func (g *Graph) String() string {
@@ -113,8 +93,6 @@ func GraphGeneratorSimple(v, e int) *Graph {
 	if e < 0 {
 		panic("too few edges")
 	}
-	rand.Seed(time.Now().UnixNano())
-
 	G := NewGraphWithV(v)
 
 	for G.e < e {

@@ -1,6 +1,9 @@
 package algs
 
-import "math"
+import (
+	"math"
+	"slices"
+)
 
 const INFINITY = math.MaxInt
 
@@ -18,7 +21,7 @@ func NewBreathFirstPaths(G *Graph, s int) *BreathFirstPaths {
 }
 
 func (p *BreathFirstPaths) BFS(G *Graph, v int) {
-	queue := NewQueue()
+	queue := NewQueue[int]()
 	for v := 0; v < G.V(); v++ {
 		p.distTo[v] = INFINITY
 	}
@@ -28,7 +31,7 @@ func (p *BreathFirstPaths) BFS(G *Graph, v int) {
 
 	queue.Enqueue(v)
 	for !queue.IsEmpty() {
-		v := queue.Dequeue().(int)
+		v := queue.Dequeue()
 		for _, w := range G.AdjInt(v) {
 			if !p.marked[w] {
 				p.distTo[w] = p.distTo[v] + 1
@@ -54,11 +57,20 @@ func (p *BreathFirstPaths) PathTo(v int) []int {
 		return nil
 	}
 
-	path := NewStack()
-	var x int
-	for x = v; p.distTo[x] != 0; x = p.edgeTo[x] {
-		path.Push(x)
+	var path []int
+	for x := v; p.distTo[x] != 0; x = p.edgeTo[x] {
+		path = append(path, x)
 	}
-	path.Push(x)
-	return ReverseInt(path.IteratorIntSlide())
+	path = append(path, p.sourceOf(v))
+	slices.Reverse(path)
+	return path
+}
+
+// sourceOf finds the source vertex for a node on a BFS tree by rewinding distTo.
+func (p *BreathFirstPaths) sourceOf(v int) int {
+	x := v
+	for p.distTo[x] != 0 {
+		x = p.edgeTo[x]
+	}
+	return x
 }

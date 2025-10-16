@@ -31,10 +31,18 @@ func (p *DepthFirstPaths) PathTo(v int) []int {
 		return nil
 	}
 
-	path := NewStack()
+	path := NewStack[int]()
 	for x := v; x != p.s; x = p.edgeTo[x] {
 		path.Push(x)
 	}
 	path.Push(p.s)
-	return ReverseInt(path.IteratorIntSlide())
+	// manual reverse because we removed interface-based iterators
+	var result []int
+	for cur := path.top; cur != nil; cur = cur.Next {
+		result = append(result, cur.Value)
+	}
+	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
+		result[i], result[j] = result[j], result[i]
+	}
+	return result
 }
