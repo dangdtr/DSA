@@ -1,0 +1,55 @@
+name: Go Tests (algs) on PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.23-alpine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build deps (Alpine)
+        run: apk add --no-cache build-base git
+
+      - name: Cache Go build and mod
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Go env
+        run: |
+          go version
+          go env
+
+      - name: Download modules
+        run: go mod download
+
+      - name: Run tests (algs and subpackages)
+        run: go test ./algs/... -race -covermode=atomic -cover -coverprofile=coverage.out
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage.out
+          if-no-files-found: warn
+
+

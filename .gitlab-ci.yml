@@ -1,0 +1,31 @@
+stages:
+  - test
+
+variables:
+  GO111MODULE: "on"
+  GOCACHE: "$CI_PROJECT_DIR/.cache/go-build"
+  GOMODCACHE: "$CI_PROJECT_DIR/.cache/gomod"
+
+cache:
+  paths:
+    - .cache/go-build
+    - .cache/gomod
+
+unit-tests:
+  stage: test
+  image: golang:1.23
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  before_script:
+    - go version
+    - go env
+    - go mod download
+  script:
+    - go test ./algs/... -race -covermode=atomic -cover -coverprofile=coverage.out
+    - go tool cover -func=coverage.out | tail -n 1 || true
+  artifacts:
+    when: always
+    paths:
+      - coverage.out
+    expire_in: 1 week
+
