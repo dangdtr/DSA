@@ -2,35 +2,31 @@ package algs
 
 import "math/rand"
 
-// QuickSort3Way (Recommend) Quick Sort 3 way to duplicate keys. Dont use cut-off!
-//  Call
-//  unsortedSlice := IntSliceToInterface(slice []int)
-// or
-//  unsortedSlice := StringSliceToInterface(slice []string)
-func QuickSort3Way(a []interface{}) {
+// QuickSort3WayFunc (Recommend) Quick Sort 3 way to duplicate keys. Dont use cut-off!
+func QuickSort3WayFunc[T any](a []T, less func(a, b T) bool) {
 	rand.Shuffle(len(a), func(i, j int) {
 		exch(a, i, j)
 	})
-	quickSort3Way(a, 0, len(a)-1)
-	IsSorted(a)
+	quickSort3WayFunc[T](a, 0, len(a)-1, less)
+	IsSortedFunc[T](a, less)
 }
 
-func quickSort3Way(a []interface{}, lo int, hi int) {
+func quickSort3WayFunc[T any](a []T, lo int, hi int, less func(a, b T) bool) {
 
 	if hi <= lo {
 		return
 	}
 
-	lt, gt := partition3Way(a, lo, hi)
+	lt, gt := partition3WayFunc[T](a, lo, hi, less)
 
 	// x[lo..lt-1] < a[lt..gt] < a[gt+1..hi]
-	quickSort3Way(a, lo, lt-1)
-	quickSort3Way(a, gt+1, hi)
+	quickSort3WayFunc[T](a, lo, lt-1, less)
+	quickSort3WayFunc[T](a, gt+1, hi, less)
 
-	IsSortedLoHi(a, lo, hi)
+	IsSortedLoHiFunc[T](a, lo, hi, less)
 }
 
-func partition3Way(a []interface{}, lo int, hi int) (int, int) {
+func partition3WayFunc[T any](a []T, lo int, hi int, less func(a, b T) bool) (int, int) {
 
 	i := lo + 1
 	lt, gt := lo, hi
@@ -38,13 +34,13 @@ func partition3Way(a []interface{}, lo int, hi int) (int, int) {
 
 	// x[lt] === x[lo]
 	for i <= gt {
-		if Less(a[i], v) {
+		if less(a[i], v) {
 			exch(a, i, lt)
 			lt++
 			i++
 			continue
 		}
-		if Less(v, a[i]) {
+		if less(v, a[i]) {
 			exch(a, i, gt)
 			gt--
 			continue

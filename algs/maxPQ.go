@@ -2,82 +2,53 @@ package algs
 
 // import "fmt"
 
-// MaxPQ type MaxPQ struct {
-// 	n  int
-// 	pq []PQItem
-// }
-type MaxPQ struct {
-	n  int
-	pq []interface{}
+// MaxPQ is a generic binary heap (max-heap) with a comparator.
+type MaxPQ[T any] struct {
+	n    int
+	pq   []T // 1-indexed
+	less func(a, b T) bool
 }
 
-type PQItem struct {
-	value interface{}
+func NewMaxPQ[T any](capacity int, less func(a, b T) bool) *MaxPQ[T] {
+	pq := make([]T, capacity+1)
+	return &MaxPQ[T]{pq: pq, less: less}
 }
 
-func NewMaxPQ(cap int) *MaxPQ {
-	pq := make([]interface{}, cap+1)
-	return &MaxPQ{pq: pq}
-}
-
-func NewMaxPQFrom(keyPQ []interface{}) *MaxPQ {
-	pqKey := make([]interface{}, len(keyPQ)+1)
-
-	pq := &MaxPQ{pq: pqKey}
-
+func NewMaxPQFrom[T any](keyPQ []T, less func(a, b T) bool) *MaxPQ[T] {
+	pqKey := make([]T, len(keyPQ)+1)
+	pq := &MaxPQ[T]{pq: pqKey, less: less}
 	pq.n = len(keyPQ)
-
 	for i := 0; i < pq.n; i++ {
 		pq.pq[i+1] = keyPQ[i]
-
 	}
 	for k := pq.n / 2; k >= 1; k-- {
 		pq.sink(k)
 	}
-	//isMaxHeap();
 	return pq
 }
 
-func (pq *MaxPQ) less(i, j int) bool {
-	a := pq.pq[i]
-	b := pq.pq[j]
-	switch a.(type) {
-	case int:
-		if ai, ok := a.(int); ok {
-			if bi, ok := b.(int); ok {
-				return ai < bi
-			}
-		}
-	case string:
-		if ai, ok := a.(string); ok {
-			if bi, ok := b.(string); ok {
-				return ai < bi
-			}
-		}
-	default:
-		panic("Unknown")
-	}
-	return false
+func (pq *MaxPQ[T]) lessIdx(i, j int) bool {
+	return pq.less(pq.pq[i], pq.pq[j])
 }
 
-func (pq *MaxPQ) exch(i, j int) {
+func (pq *MaxPQ[T]) exch(i, j int) {
 	pq.pq[i], pq.pq[j] = pq.pq[j], pq.pq[i]
 }
 
-func (pq *MaxPQ) swim(k int) {
-	for k > 1 && pq.less(k/2, k) {
+func (pq *MaxPQ[T]) swim(k int) {
+	for k > 1 && pq.lessIdx(k/2, k) {
 		pq.exch(k, k/2)
 		k = k / 2
 	}
 }
 
-func (pq *MaxPQ) sink(k int) {
+func (pq *MaxPQ[T]) sink(k int) {
 	for 2*k <= pq.n {
 		j := 2 * k
-		if j < pq.n && pq.less(j, j+1) {
+		if j < pq.n && pq.lessIdx(j, j+1) {
 			j++
 		}
-		if !pq.less(k, j) {
+		if !pq.lessIdx(k, j) {
 			break
 		}
 		pq.exch(k, j)
@@ -85,49 +56,45 @@ func (pq *MaxPQ) sink(k int) {
 	}
 }
 
-func (pq *MaxPQ) isEmpty() bool {
+func (pq *MaxPQ[T]) isEmpty() bool {
 	return pq.n == 0
 }
 
-func (pq *MaxPQ) Insert(key PQItem) {
+func (pq *MaxPQ[T]) Insert(key T) {
 	if pq.n == len(pq.pq)-1 {
 		pq.resize(2 * len(pq.pq))
 	}
-
 	pq.n++
 	pq.pq[pq.n] = key
 	pq.swim(pq.n)
-
-	//isMaxHeap();
 }
 
-func (pq *MaxPQ) DelMax() interface{} {
-	max := pq.pq[1]
+func (pq *MaxPQ[T]) DelMax() T {
+    maxVal := pq.pq[1]
 	pq.exch(1, pq.n)
 	pq.n--
 	pq.sink(1)
-	pq.pq[pq.n+1] = nil
+	var zero T
+	pq.pq[pq.n+1] = zero
 	if pq.n > 0 && pq.n == (len(pq.pq)-1)/4 {
 		pq.resize(len(pq.pq) / 2)
 	}
-	//isMaxHeap()
-
-	return max
+    return maxVal
 }
 
-func (pq *MaxPQ) Max() interface{} {
+func (pq *MaxPQ[T]) Max() T {
 	return pq.pq[1]
 }
 
-func (pq *MaxPQ) resize(cap int) {
-	temp := make([]interface{}, cap)
+func (pq *MaxPQ[T]) resize(newCap int) {
+	temp := make([]T, newCap)
 	for i := 1; i <= pq.n; i++ {
 		temp[i] = pq.pq[i]
 	}
 	pq.pq = temp
 }
 
-func (pq *MaxPQ) Show() (in []interface{}) {
+func (pq *MaxPQ[T]) Show() (in []T) {
 	for i := 0; i <= pq.n; i++ {
 		in = append(in, pq.pq[i])
 	}

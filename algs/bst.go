@@ -1,40 +1,38 @@
 package algs
 
-import "fmt"
+import (
+	"cmp"
+	"fmt"
+)
 
-type BSTNode struct {
-	key         Key
-	val         interface{}
+type BSTNode[K cmp.Ordered, V any] struct {
+	key         K
+	val         V
 	n           int
-	left, right *BSTNode
+	left, right *BSTNode[K, V]
 }
 
-type BST struct {
-	root *BSTNode
+type BST[K cmp.Ordered, V any] struct {
+	root *BSTNode[K, V]
 }
 
-func NewBST() *BST {
-	return &BST{}
+func NewBST[K cmp.Ordered, V any]() *BST[K, V] {
+	return &BST[K, V]{}
 }
 
-func (bst *BST) Put(key Key, val interface{}) {
-	// if val == nil {
-	// 	bst.Delete(key)
-	// 	return
-	// }
+func (bst *BST[K, V]) Put(key K, val V) {
 	bst.root = bst.put(bst.root, key, val)
 }
 
-func (bst *BST) put(x *BSTNode, key Key, val interface{}) *BSTNode {
+func (bst *BST[K, V]) put(x *BSTNode[K, V], key K, val V) *BSTNode[K, V] {
 	if x == nil {
-		return &BSTNode{key: key, val: val, n: 1}
+		return &BSTNode[K, V]{key: key, val: val, n: 1}
 	}
 
-	cmp := key.compareTo(x.key)
-	// fmt.Println("putting", key, "_")
-	if cmp < 0 {
+	c := cmp.Compare(key, x.key)
+	if c < 0 {
 		x.left = bst.put(x.left, key, val)
-	} else if cmp > 0 {
+	} else if c > 0 {
 		x.right = bst.put(x.right, key, val)
 	} else {
 		x.val = val
@@ -43,45 +41,43 @@ func (bst *BST) put(x *BSTNode, key Key, val interface{}) *BSTNode {
 	return x
 }
 
-func (bst *BST) Get(key Key) interface{} {
+func (bst *BST[K, V]) Get(key K) (V, bool) {
 	return bst.get(bst.root, key)
 }
 
-func (bst *BST) get(x *BSTNode, key Key) interface{} {
+func (bst *BST[K, V]) get(x *BSTNode[K, V], key K) (V, bool) {
 	if x == nil {
-		return nil
+		var zero V
+		return zero, false
 	}
 
-	cmp := key.compareTo(x.key)
-
-	if cmp < 0 {
-		bst.get(x.left, key)
-	} else if cmp > 0 {
-		bst.get(x.right, key)
-	} // else {
-	return x.val
-	// }
-
+	c := cmp.Compare(key, x.key)
+	if c < 0 {
+		return bst.get(x.left, key)
+	} else if c > 0 {
+		return bst.get(x.right, key)
+	}
+	return x.val, true
 }
 
-func (bst *BST) Contains(key Key) bool {
-	return bst.Get(key) != nil
+func (bst *BST[K, V]) Contains(key K) bool {
+	_, ok := bst.Get(key)
+	return ok
 }
 
-func (bst *BST) Delete(key Key) {
+func (bst *BST[K, V]) Delete(key K) {
 	bst.root = bst.delete(bst.root, key)
 }
 
-func (bst *BST) delete(x *BSTNode, key Key) *BSTNode {
+func (bst *BST[K, V]) delete(x *BSTNode[K, V], key K) *BSTNode[K, V] {
 	if x == nil {
 		return nil
 	}
 
-	cmp := key.compareTo(x.key)
-
-	if cmp < 0 {
+	c := cmp.Compare(key, x.key)
+	if c < 0 {
 		x.left = bst.delete(x.left, key)
-	} else if cmp > 0 {
+	} else if c > 0 {
 		x.right = bst.delete(x.right, key)
 	} else {
 		if x.right == nil {
@@ -99,10 +95,11 @@ func (bst *BST) delete(x *BSTNode, key Key) *BSTNode {
 	return x
 }
 
-func (bst *BST) DeleteMin() {
+func (bst *BST[K, V]) DeleteMin() {
 	bst.root = bst.deleteMin(bst.root)
 }
-func (bst *BST) deleteMin(x *BSTNode) *BSTNode {
+
+func (bst *BST[K, V]) deleteMin(x *BSTNode[K, V]) *BSTNode[K, V] {
 	if x.left == nil {
 		return x.right
 	}
@@ -111,11 +108,11 @@ func (bst *BST) deleteMin(x *BSTNode) *BSTNode {
 	return x
 }
 
-func (bst *BST) DeleteMax() {
+func (bst *BST[K, V]) DeleteMax() {
 	bst.root = bst.deleteMax(bst.root)
 }
 
-func (bst *BST) deleteMax(x *BSTNode) *BSTNode {
+func (bst *BST[K, V]) deleteMax(x *BSTNode[K, V]) *BSTNode[K, V] {
 	if x.right == nil {
 		return x.left
 	}
@@ -124,47 +121,48 @@ func (bst *BST) deleteMax(x *BSTNode) *BSTNode {
 	return x
 }
 
-func (bst *BST) Min() Key {
+func (bst *BST[K, V]) Min() K {
 	return bst.min(bst.root).key
 }
 
-func (bst *BST) min(x *BSTNode) *BSTNode {
+func (bst *BST[K, V]) min(x *BSTNode[K, V]) *BSTNode[K, V] {
 	if x.left == nil {
 		return x
 	}
 	return bst.min(x.left)
 }
 
-func (bst *BST) Max() Key {
+func (bst *BST[K, V]) Max() K {
 	return bst.max(bst.root).key
 }
 
-func (bst *BST) max(x *BSTNode) *BSTNode {
+func (bst *BST[K, V]) max(x *BSTNode[K, V]) *BSTNode[K, V] {
 	if x.right == nil {
 		return x
 	}
 	return bst.max(x.right)
 }
 
-func (bst *BST) Size() int {
+func (bst *BST[K, V]) Size() int {
 	return bst.size(bst.root)
 }
-func (bst *BST) size(x *BSTNode) int {
+
+func (bst *BST[K, V]) size(x *BSTNode[K, V]) int {
 	if x == nil {
 		return 0
 	}
 	return x.n
 }
 
-func (bst *BST) IsEmpty() bool {
+func (bst *BST[K, V]) IsEmpty() bool {
 	return bst.size(bst.root) == 0
 }
 
-func (bst *BST) Inorder() {
+func (bst *BST[K, V]) Inorder() {
 	bst.inorder(bst.root)
 }
 
-func (bst *BST) inorder(x *BSTNode) {
+func (bst *BST[K, V]) inorder(x *BSTNode[K, V]) {
 	if x == nil {
 		return
 	}
@@ -173,18 +171,19 @@ func (bst *BST) inorder(x *BSTNode) {
 	bst.inorder(x.right)
 }
 
-func (bst *BST) IsBST() bool {
-	return bst.isBST(bst.root, nil, nil)
+func (bst *BST[K, V]) IsBST() bool {
+    return bst.isBST(bst.root, nil, nil)
 }
-func (bst *BST) isBST(x *BSTNode, min Key, max Key) bool {
+
+func (bst *BST[K, V]) isBST(x *BSTNode[K, V], minKey *K, maxKey *K) bool {
 	if x == nil {
 		return true
 	}
-	if min != nil && x.key.compareTo(min) <= 0 {
+    if minKey != nil && cmp.Compare(x.key, *minKey) <= 0 {
 		return false
 	}
-	if max != nil && x.key.compareTo(max) >= 0 {
+    if maxKey != nil && cmp.Compare(x.key, *maxKey) >= 0 {
 		return false
 	}
-	return bst.isBST(x.left, min, x.key) && bst.isBST(x.right, x.key, max)
+    return bst.isBST(x.left, minKey, &x.key) && bst.isBST(x.right, &x.key, maxKey)
 }

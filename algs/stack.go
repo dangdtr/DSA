@@ -1,46 +1,37 @@
 package algs
 
-import "fmt"
-
-type Stack struct {
-	top  *Node
+// Stack is a generic LIFO stack implemented with a singly linked list node.
+type Stack[T any] struct {
+	top  *nodeS[T]
 	size int
 }
 
-func (stack *Stack) Push(value interface{}) {
-	newNode := &Node{} // create new node
-
-	newNode.Value = value
-	newNode.Next = stack.top
-
+func (stack *Stack[T]) Push(value T) {
+	newNode := &nodeS[T]{Value: value, Next: stack.top}
 	stack.top = newNode
 	stack.size++
 }
 
-func (stack *Stack) Pop() interface{} {
-	popValue := stack.top.Value
-	if stack.top.Next == nil {
-		stack.top = nil
-	} else {
-		stack.top.Value, stack.top.Next = stack.top.Next.Value, stack.top.Next.Next
-	}
+func (stack *Stack[T]) Pop() T {
+	value := stack.top.Value
+	stack.top = stack.top.Next
 	stack.size--
-	return popValue
+	return value
 }
 
-func (stack *Stack) Peek() interface{} {
+func (stack *Stack[T]) Peek() T {
 	return stack.top.Value
 }
 
-func (stack *Stack) StackSize() int {
+func (stack *Stack[T]) StackSize() int {
 	return stack.size
 }
 
-func (stack *Stack) IsEmpty() bool {
-	return stack.StackSize() == 0
+func (stack *Stack[T]) IsEmpty() bool {
+	return stack.size == 0
 }
 
-func (stack *Stack) Show() (in []interface{}) {
+func (stack *Stack[T]) Show() (in []T) {
 	current := stack.top
 
 	for current != nil {
@@ -50,39 +41,23 @@ func (stack *Stack) Show() (in []interface{}) {
 	return
 }
 
-func NewStack() *Stack {
-	return &Stack{}
+func NewStack[T any]() *Stack[T] {
+	return &Stack[T]{}
 }
 
-func (stack *Stack) IteratorSlide() (item []interface{}) {
-	var temp []interface{}
+func (stack *Stack[T]) Iterator() (items []T) {
+	var temp []T
 	for current := stack.top; current != nil; current = current.Next {
 		temp = append(temp, current.Value)
 	}
 	for i := len(temp) - 1; i >= 0; i-- {
-		item = append(item, temp[i])
+		items = append(items, temp[i])
 	}
 	return
 }
 
-func (stack *Stack) IteratorIntSlide() (item []int) {
-	var temp []int
-	for current := stack.top; current != nil; current = current.Next {
-		temp = append(temp, current.Value.(int))
-	}
-	for i := len(temp) - 1; i >= 0; i-- {
-		item = append(item, temp[i])
-	}
-	return
-}
-
-func (stack *Stack) Test() {
-	myStack := NewStack()
-	myStack.Push(4)
-	myStack.Push(7)
-	myStack.Push(5)
-	myStack.Push(6)
-	myStack.Pop()
-	fmt.Println(myStack.Show())
-
+// nodeS is an internal stack node type.
+type nodeS[T any] struct {
+	Value T
+	Next  *nodeS[T]
 }

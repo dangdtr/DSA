@@ -1,3 +1,3 @@
 module github.com/dawnpanpan/go-dsa
 
-go 1.17
+go 1.23
